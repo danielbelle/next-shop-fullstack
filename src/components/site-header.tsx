@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   ShoppingCartIcon,
@@ -11,8 +11,14 @@ import {
   ArrowRight,
 } from "lucide-react";
 
-  //@ts-ignore
-const Header = ({ setCurrentPage, cart, setCart, isCartOpen, setIsCartOpen }) => {
+//@ts-ignore
+const Header = ({
+  setCurrentPage,
+  cart,
+  setCart,
+  isCartOpen,
+  setIsCartOpen,
+}) => {
   //@ts-ignore
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -22,10 +28,14 @@ const Header = ({ setCurrentPage, cart, setCart, isCartOpen, setIsCartOpen }) =>
     const existingItem = cart.find((item) => item.id === product.id);
     if (existingItem) {
       //@ts-ignore
-      setCart(cart.map((item) =>
-        //@ts-ignore
-        item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
-      ));
+      setCart(
+        cart.map((item) =>
+          //@ts-ignore
+          item.id === product.id
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        )
+      );
     } else {
       //@ts-ignore
       setCart([...cart, { ...product, quantity: 1 }]);
@@ -45,21 +55,24 @@ const Header = ({ setCurrentPage, cart, setCart, isCartOpen, setIsCartOpen }) =>
       removeFromCart(productId);
     } else {
       //@ts-ignore
-      setCart(cart.map((item) =>
-        //@ts-ignore
-        item.id === productId ? { ...item, quantity: newQuantity } : item
-      ));
+      setCart(
+        cart.map((item) =>
+          //@ts-ignore
+          item.id === productId ? { ...item, quantity: newQuantity } : item
+        )
+      );
     }
   };
 
   //@ts-ignore
   const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
   //@ts-ignore
-  const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  
+  const totalPrice = cart.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  );
 
   return (
-    
     <div className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-14 items-center">
         <div className="mr-4 hidden md:flex">
@@ -131,16 +144,10 @@ const Header = ({ setCurrentPage, cart, setCart, isCartOpen, setIsCartOpen }) =>
                 >
                   Categories
                 </a>
-                <a
-                  className="text-sm font-medium text-primary"
-                  href="#"
-                >
+                <a className="text-sm font-medium text-primary" href="#">
                   Deals
                 </a>
-                <a
-                  className="text-sm font-medium text-primary"
-                  href="/#about"
-                >
+                <a className="text-sm font-medium text-primary" href="/#about">
                   About
                 </a>
               </div>

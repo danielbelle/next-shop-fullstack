@@ -256,7 +256,7 @@ export default function ECommerceApp() {
       {isCartOpen && (
         <>
           <div
-            className="fixed inset-0 bg-black bg-opacity-50 z-40"
+            className="fixed inset-0 bg-black opacity-50 z-40"
             onClick={() => setIsCartOpen(false)}
           />
           <div className="fixed inset-y-0 right-0 w-full sm:w-96 bg-background shadow-lg p-6 overflow-y-auto z-50">
