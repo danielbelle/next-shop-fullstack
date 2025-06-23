@@ -1,103 +1,367 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+import { useState, useEffect, useRef } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  ShoppingCartIcon,
+  MenuIcon,
+  XIcon,
+  MinusIcon,
+  PlusIcon,
+  TrashIcon,
+} from "lucide-react";
+import { ArrowRight, ShoppingBag } from "lucide-react";
+import CompanyLogoSection from "@/components/company-logo";
+import DealsSection from "@/components/deals-section";
+import CategorySection from "@/components/category-section";
+import TestimonialSection from "@/components/testimonial-section";
+import FeaturesSection from "@/components/features-section";
+import CTASignUpSection from "@/components/cta-section";
+import SiteFooter from "@/components/site-footer";
+import ProductPage from "@/components/product-section";
+import Header from "@/components/site-header";
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+const products = [
+  {
+    id: 1,
+    name: "Project Management Pro",
+    price: 99.99,
+    image: "https://via.placeholder.com/1000",
+  },
+  {
+    id: 2,
+    name: "Code Editor Deluxe",
+    price: 79.99,
+    image: "https://via.placeholder.com/1000",
+  },
+  {
+    id: 3,
+    name: "Database Manager Ultimate",
+    price: 149.99,
+    image: "https://via.placeholder.com/1000",
+  },
+  {
+    id: 4,
+    name: "Cloud Storage Solution",
+    price: 59.99,
+    image: "https://via.placeholder.com/1000",
+  },
+  {
+    id: 5,
+    name: "Secure VPN Service",
+    price: 39.99,
+    image: "https://via.placeholder.com/1000",
+  },
+  {
+    id: 6,
+    name: "AI-Powered Analytics",
+    price: 199.99,
+    image: "https://via.placeholder.com/1000",
+  },
+];
+
+const categories = [
+  { name: "Marketing Tools", icon: "📈" },
+  { name: "Design Software", icon: "🎨" },
+  { name: "AI Solutions", icon: "🤖" },
+  { name: "Project Management", icon: "📅" },
+  { name: "Communication Tools", icon: "💬" },
+  { name: "Analytics Platforms", icon: "📊" },
+];
+
+const deals = [
+  {
+    id: 7,
+    name: "AI Assistant Pro",
+    price: 79.99,
+    originalPrice: 129.99,
+    image: "https://via.placeholder.com/1000",
+    tag: "New Product",
+  },
+  {
+    id: 8,
+    name: "Cloud Sync Ultimate",
+    price: 49.99,
+    originalPrice: 89.99,
+    image: "https://via.placeholder.com/1000",
+    tag: "Deal of the Day",
+  },
+  {
+    id: 9,
+    name: "Marketing Automation Suite",
+    price: 159.99,
+    originalPrice: 249.99,
+    image: "https://via.placeholder.com/1000",
+    tag: "Monthly Special",
+  },
+  {
+    id: 10,
+    name: "Collaboration Platform",
+    price: 29.99,
+    originalPrice: 59.99,
+    image: "https://via.placeholder.com/1000",
+    tag: "New Deal",
+  },
+];
+
+type CartItem = {
+  id: number;
+  name: string;
+  price: number;
+  image: string;
+  quantity: number;
+};
+
+export default function ECommerceApp() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState("landing");
+  const [cart, setCart] = useState<CartItem[]>([]);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+
+  useEffect(() => {
+    const savedCart = localStorage.getItem("cart");
+    if (savedCart) {
+      setCart(JSON.parse(savedCart));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("cart", JSON.stringify(cart));
+  }, [cart]);
+
+  // @ts-ignore
+  const addToCart = (product) => {
+    // @ts-ignore
+    const existingItem = cart.find((item) => item.id === product.id);
+    if (existingItem) {
+      // @ts-ignore
+      setCart(
+        // @ts-ignore
+        cart.map((item) =>
+          // @ts-ignore
+          item.id === product.id
+            ? // @ts-ignore
+              { ...item, quantity: item.quantity + 1 }
+            : item
+        )
+      );
+    } else {
+      // @ts-ignore
+      setCart([...cart, { ...product, quantity: 1 }]);
+    }
+  };
+
+  // @ts-ignore
+  const removeFromCart = (productId) => {
+    // @ts-ignore
+    setCart(cart.filter((item) => item.id !== productId));
+  };
+
+  // @ts-ignore
+  const updateQuantity = (productId, newQuantity) => {
+    if (newQuantity === 0) {
+      // @ts-ignore
+      removeFromCart(productId);
+    } else {
+      // @ts-ignore
+      setCart(
+        // @ts-ignore
+        cart.map((item) =>
+          // @ts-ignore
+          item.id === productId ? { ...item, quantity: newQuantity } : item
+        )
+      );
+    }
+  };
+
+  // @ts-ignore
+  const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+  // @ts-ignore
+  const totalPrice = cart.reduce(
+    // @ts-ignore
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  );
+
+  const renderLandingPage = () => (
+    // Landing Page  Section
+    <main className="flex-1">
+      <section className="w-full py-12 md:py-24 lg:py-28 xl:py-28 bg-white dark:bg-black overflow-hidden">
+        <div className="container px-4 md:px-6 mx-auto">
+          <div className="grid gap-6 lg:grid-cols-[1fr_500px] lg:gap-12 xl:grid-cols-[1fr_700px] items-center">
+            <div className="flex flex-col justify-center space-y-4 text-center lg:text-left">
+              <h1 className="text-4xl font-extrabold tracking-tighter sm:text-5xl xl:text-6xl/none text-black dark:text-white">
+                Shop with Ease, Anytime, Anywhere
+              </h1>
+              <p className="max-w-[600px] text-gray-600 dark:text-gray-300 md:text-xl mx-auto lg:mx-0">
+                Discover a world of products at your fingertips. From fashion to
+                electronics, we've got you covered.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                <Button
+                  className="inline-flex items-center justify-center rounded-md bg-black text-white dark:bg-white dark:text-black shadow transition-colors hover:bg-gray-800 dark:hover:bg-gray-200 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-400"
+                  onClick={() => setCurrentPage("products")}
+                >
+                  Shop Now
+                  <ShoppingBag className="ml-2 h-4 w-4" />
+                </Button>
+                <Button
+                  variant="outline"
+                  className="inline-flex items-center justify-center border-black text-black dark:border-white dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900"
+                  onClick={() => window.open("https://easyui.pro", "_blank")}
+                >
+                  Learn More
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+            <div className="relative mx-auto lg:order-last">
+              <img
+                alt="Hero"
+                className="relative z-10 w-full h-[auto] max-w-[700px] aspect-[4/3] object-cover object-center"
+                height="750"
+                src="/easy-transparent3.png"
+                width="700"
+              />
+              <div className="absolute -top-4 -left-4 w-6 h-6 bg-black dark:bg-white rounded-full" />
+              <div className="absolute -bottom-4 -right-4 w-6 h-6 bg-black dark:bg-white rounded-full" />
+
+              <div
+                className="absolute inset-0 z-0"
+                style={{
+                  backgroundImage:
+                    "radial-gradient(circle at 50% 50%, rgba(255,255,255,0.1), rgba(0,0,0,0.05) 70%, transparent 70%)",
+                }}
+              />
+            </div>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
+      </section>
+      <CompanyLogoSection />
+      <DealsSection deals={deals} addToCart={addToCart} />
+
+      <CategorySection categories={categories} />
+
+      <TestimonialSection />
+
+      <FeaturesSection />
+
+      <CTASignUpSection />
+    </main>
+  );
+
+  const renderCart = () => (
+    // Cart Section
+    <>
+      {isCartOpen && (
+        <>
+          <div
+            className="fixed inset-0 bg-black bg-opacity-50 z-40"
+            onClick={() => setIsCartOpen(false)}
           />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+          <div className="fixed inset-y-0 right-0 w-full sm:w-96 bg-background shadow-lg p-6 overflow-y-auto z-50">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl font-bold">Your Cart</h2>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setIsCartOpen(false)}
+              >
+                <XIcon className="h-6 w-6" />
+              </Button>
+            </div>
+            {cart.length === 0 ? (
+              <p className="text-muted-foreground">Your cart is empty.</p>
+            ) : (
+              <>
+                {cart.map((item) => (
+                  <div
+                    // @ts-ignore
+                    key={item.id}
+                    className="flex items-center justify-between mb-4"
+                  >
+                    <div className="flex items-center">
+                      <img
+                        // @ts-ignore
+                        src={item.image}
+                        // @ts-ignore
+                        alt={item.name}
+                        className="w-16 h-16 object-cover rounded-md mr-4"
+                      />
+                      <div>
+                        {/* @ts-ignore */}
+                        <h3 className="font-semibold">{item.name}</h3>
+                        <p className="text-sm text-muted-foreground">
+                          {/* @ts-ignore */}${item.price.toFixed(2)}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-center">
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        onClick={() =>
+                          //@ts-ignore
+                          updateQuantity(item.id, item.quantity - 1)
+                        }
+                      >
+                        <MinusIcon className="h-4 w-4" />
+                      </Button>
+                      {/* @ts-ignore */}
+                      <span className="mx-2">{item.quantity}</span>
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        onClick={() =>
+                          //@ts-ignore
+                          updateQuantity(item.id, item.quantity + 1)
+                        }
+                      >
+                        <PlusIcon className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="ml-2"
+                        //@ts-ignore
+                        onClick={() => removeFromCart(item.id)}
+                      >
+                        <TrashIcon className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+                <div className="mt-6 border-t pt-4">
+                  <div className="flex justify-between items-center mb-4">
+                    <span className="font-semibold">Total:</span>
+                    <span className="font-bold">${totalPrice.toFixed(2)}</span>
+                  </div>
+                  <Button className="w-full">Proceed to Checkout</Button>
+                </div>
+              </>
+            )}
+          </div>
+        </>
+      )}
+    </>
+  );
+
+  return (
+    <div className="flex flex-col min-h-screen">
+      <Header
+        setCurrentPage={setCurrentPage}
+        cart={cart}
+        setCart={setCart}
+        isCartOpen={isCartOpen}
+        setIsCartOpen={setIsCartOpen}
+      />
+      {currentPage === "landing" ? (
+        renderLandingPage()
+      ) : (
+        <ProductPage products={products} addToCart={addToCart} />
+      )}
+      {renderCart()}
+      <SiteFooter />
     </div>
   );
 }
