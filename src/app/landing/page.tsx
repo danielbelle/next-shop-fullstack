@@ -1,10 +1,10 @@
-import LogoSection from "@/components/landing/LogoSection";
-import DealsSection from "@/components/landing/DealsSection";
-import CategorySection from "@/components/landing/CategorySection";
-import TestimonialSection from "@/components/landing/TestimonialSection";
-import FeaturesSection from "@/components/landing/FeaturesSection";
-import CtaSection from "@/components/landing/CtaSection";
-import StartSection from "@/components/landing/StartSection";
+import LogoSection from "@/app/landing/components/LogoSection";
+import DealsSection from "@/app/landing/components/DealsSection";
+import CategorySection from "@/app/landing/components/CategorySection";
+import TestimonialSection from "@/app/landing/components/TestimonialSection";
+import FeaturesSection from "@/app/landing/components/FeaturesSection";
+import CtaSection from "@/app/landing/components/CtaSection";
+import StartSection from "@/app/landing/components/StartSection";
 import { Deal, Category, Product } from "@/data/mock-data";
 
 type LandingPageProps = {

@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/Button";
 import { XIcon, MinusIcon, PlusIcon, TrashIcon } from "lucide-react";
 
 type CartItem = {
@@ -18,7 +18,7 @@ type CartProps = {
   totalPrice: number;
 };
 
-export default function Cart({
+export default function CartDrawer({
   isCartOpen,
   setIsCartOpen,
   cart,

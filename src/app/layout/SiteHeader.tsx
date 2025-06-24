@@ -1,97 +1,36 @@
+"use client";
 import React, { useState } from "react";
-import { Button } from "@/components/ui/button";
-import {
-  ShoppingCartIcon,
-  MenuIcon,
-  XIcon,
-  MinusIcon,
-  PlusIcon,
-  TrashIcon,
-  ShoppingBag,
-  ArrowRight,
-} from "lucide-react";
+import { Button } from "@/components/ui/Button";
+import { ShoppingCartIcon, MenuIcon, XIcon } from "lucide-react";
+import Link from "next/link";
+import { useCart } from "@/context/CartContext";
 
-//@ts-ignore
-const Header = ({
-  setCurrentPage,
-  cart,
-  setCart,
-  isCartOpen,
-  setIsCartOpen,
-}) => {
-  //@ts-ignore
+const SiteHeader: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const {
+    cart,
+    isCartOpen,
+    setIsCartOpen,
+    // addToCart, removeFromCart, updateQuantity (se quiser usar no header)
+  } = useCart();
 
-  //@ts-ignore
-  const addToCart = (product) => {
-    //@ts-ignore
-    const existingItem = cart.find((item) => item.id === product.id);
-    if (existingItem) {
-      //@ts-ignore
-      setCart(
-        cart.map((item) =>
-          //@ts-ignore
-          item.id === product.id
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        )
-      );
-    } else {
-      //@ts-ignore
-      setCart([...cart, { ...product, quantity: 1 }]);
-    }
-  };
-
-  //@ts-ignore
-  const removeFromCart = (productId) => {
-    //@ts-ignore
-    setCart(cart.filter((item) => item.id !== productId));
-  };
-
-  //@ts-ignore
-  const updateQuantity = (productId, newQuantity) => {
-    if (newQuantity === 0) {
-      //@ts-ignore
-      removeFromCart(productId);
-    } else {
-      //@ts-ignore
-      setCart(
-        cart.map((item) =>
-          //@ts-ignore
-          item.id === productId ? { ...item, quantity: newQuantity } : item
-        )
-      );
-    }
-  };
-
-  //@ts-ignore
   const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-  //@ts-ignore
-  const totalPrice = cart.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0
-  );
 
   return (
     <div className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-14 items-center">
         <div className="mr-4 hidden md:flex">
-          <a
-            className="mr-6 flex items-center space-x-2"
-            href="/#"
-            onClick={() => setCurrentPage("landing")}
-          >
+          <Link className="mr-6 flex items-center space-x-2" href="/">
             <ShoppingCartIcon className="h-6 w-6" />
             <span className="hidden font-bold sm:inline-block">Easy UI</span>
-          </a>
+          </Link>
           <nav className="flex items-center space-x-6 text-sm font-medium">
-            <a
+            <Link
               className="transition-colors hover:text-foreground/80 text-foreground/60"
-              href="#"
-              onClick={() => setCurrentPage("products")}
+              href="/products"
             >
               Products
-            </a>
+            </Link>
             <a
               className="transition-colors hover:text-foreground/80 text-foreground/60"
               href="/#categories-section"
@@ -104,12 +43,12 @@ const Header = ({
             >
               Deals
             </a>
-            <a
+            <Link
               className="transition-colors hover:text-foreground/80 text-foreground/60"
               href="/about"
             >
               About
-            </a>
+            </Link>
           </nav>
         </div>
         <button
@@ -117,8 +56,6 @@ const Header = ({
           type="button"
           aria-haspopup="dialog"
           aria-expanded={isMenuOpen}
-          aria-controls="radix-:R1mcq:"
-          data-state={isMenuOpen ? "open" : "closed"}
           onClick={() => setIsMenuOpen(!isMenuOpen)}
         >
           <MenuIcon className="h-5 w-5" />
@@ -128,31 +65,37 @@ const Header = ({
           <div className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm md:hidden">
             <div className="fixed left-0 top-0 bottom-0 w-full max-w-xs p-6 bg-background shadow-lg">
               <div className="flex flex-col space-y-4">
-                <a
+                <Link
                   className="text-sm font-medium text-primary"
-                  href="#"
-                  onClick={() => {
-                    setCurrentPage("products");
-                    setIsMenuOpen(false);
-                  }}
+                  href="/products"
+                  onClick={() => setIsMenuOpen(false)}
                 >
                   Products
-                </a>
+                </Link>
                 <a
                   className="text-sm font-medium text-primary"
                   href="/#categories-section"
+                  onClick={() => setIsMenuOpen(false)}
                 >
                   Categories
                 </a>
-                <a className="text-sm font-medium text-primary" href="#">
+                <a
+                  className="text-sm font-medium text-primary"
+                  href="/#deals"
+                  onClick={() => setIsMenuOpen(false)}
+                >
                   Deals
                 </a>
-                <a className="text-sm font-medium text-primary" href="/#about">
+                <Link
+                  className="text-sm font-medium text-primary"
+                  href="/about"
+                  onClick={() => setIsMenuOpen(false)}
+                >
                   About
-                </a>
+                </Link>
               </div>
               <button
-                className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary"
+                className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
                 onClick={() => setIsMenuOpen(false)}
               >
                 <XIcon className="h-4 w-4" />
@@ -194,4 +137,4 @@ const Header = ({
   );
 };
 
-export default Header;
+export default SiteHeader;
