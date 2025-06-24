@@ -1,11 +1,8 @@
 import { Button } from "@/components/ui/Button";
 import { ArrowRight, ShoppingBag } from "lucide-react";
+import Link from "next/link";
 
-type StartProps = {
-  setCurrentPage: (page: "landing" | "products") => void;
-};
-
-export default function Start({ setCurrentPage }: StartProps) {
+export default function StartSection() {
   return (
     <section className="w-full py-12 md:py-24 lg:py-28 xl:py-28 bg-white dark:bg-black overflow-hidden">
       <div className="container px-4 md:px-6 mx-auto">
@@ -19,13 +16,12 @@ export default function Start({ setCurrentPage }: StartProps) {
               electronics, we've got you covered.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-              <Button
-                className="inline-flex items-center justify-center rounded-md bg-black text-white dark:bg-white dark:text-black shadow transition-colors hover:bg-gray-800 dark:hover:bg-gray-200 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-400"
-                onClick={() => setCurrentPage("products")}
-              >
-                Shop Now
-                <ShoppingBag className="ml-2 h-4 w-4" />
-              </Button>
+              <Link href="/products">
+                <Button className="inline-flex items-center justify-center rounded-md bg-black text-white dark:bg-white dark:text-black shadow transition-colors hover:bg-gray-800 dark:hover:bg-gray-200 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-400">
+                  Shop Now
+                  <ShoppingBag className="ml-2 h-4 w-4" />
+                </Button>
+              </Link>
               <Button
                 variant="outline"
                 className="inline-flex items-center justify-center border-black text-black dark:border-white dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900"
