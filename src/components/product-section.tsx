@@ -1,6 +1,6 @@
-import React from 'react';
-import { Button } from './ui/button';
-import { Card, CardContent } from './ui/card';
+import React from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 // Import any additional components or hooks you need
 
 // Assuming `products` and `addToCart` are passed as props

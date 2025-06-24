@@ -1,8 +1,8 @@
-import React from 'react';
-import { Button } from './ui/button';
-import { Input } from './ui/input';
+import React from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
-const CTASignUpSection = () => {
+const CtaSection = () => {
   return (
     <section className="w-full py-12 md:py-24 lg:py-32 ">
       <div className="container px-4 md:px-6">
@@ -39,4 +39,4 @@ const CTASignUpSection = () => {
   );
 };
 
-export default CTASignUpSection;
+export default CtaSection;

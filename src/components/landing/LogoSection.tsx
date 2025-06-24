@@ -1,6 +1,6 @@
-import React from 'react';
+import React from "react";
 
-const CompanyLogoSection = () => {
+const LogoSection = () => {
   const companies = [
     {
       name: "Slack",
@@ -31,7 +31,7 @@ const CompanyLogoSection = () => {
   return (
     <section className="w-full ">
       <div className="container px-4 md:px-6">
-      <h2 className="text-2xl font-extrabold text-center text-gray-900 mb-16">
+        <h2 className="text-2xl font-extrabold text-center text-gray-900 mb-16">
           Trusted by Top Brands
         </h2>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 items-center justify-center">
@@ -55,4 +55,4 @@ const CompanyLogoSection = () => {
   );
 };
 
-export default CompanyLogoSection;
+export default LogoSection;

@@ -1,5 +1,5 @@
-import React from 'react';
-import { Card, CardContent } from './ui/card';
+import React from "react";
+import { Card, CardContent } from "@/components/ui/card";
 
 const features = [
   {
@@ -75,7 +75,7 @@ const FeaturesSection = () => {
   return (
     <section className="w-full mt-10">
       <div className="container px-4 md:px-6">
-      <h2 className="text-2xl font-extrabold text-center text-gray-900 mb-10 lg:mb-16">
+        <h2 className="text-2xl font-extrabold text-center text-gray-900 mb-10 lg:mb-16">
           Our Features
         </h2>
         <div className="grid gap-6 lg:grid-cols-3">
@@ -85,9 +85,7 @@ const FeaturesSection = () => {
                 <CardContent className="p-6">
                   {feature.icon}
                   <h3 className="text-lg font-bold mb-2">{feature.title}</h3>
-                  <p className="text-muted-foreground">
-                    {feature.description}
-                  </p>
+                  <p className="text-muted-foreground">{feature.description}</p>
                 </CardContent>
               </Card>
             </div>

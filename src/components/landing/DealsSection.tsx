@@ -1,6 +1,6 @@
-import React from 'react';
-import { Button } from './ui/button';
-import { Card, CardContent } from './ui/card';
+import React from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
 interface Deal {
   id: number;
@@ -20,7 +20,7 @@ const DealsSection: React.FC<DealsSectionProps> = ({ deals, addToCart }) => {
   return (
     <section className="w-full mt-10" id="deals">
       <div className="container px-4 md:px-6 ">
-      <h2 className="text-2xl font-extrabold text-center text-gray-900 mb-15 mt-16">
+        <h2 className="text-2xl font-extrabold text-center text-gray-900 mb-15 mt-16">
           Hot Deals
         </h2>
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 mt-10">
@@ -49,7 +49,11 @@ const DealsSection: React.FC<DealsSectionProps> = ({ deals, addToCart }) => {
                       </span>
                     </div>
                   </div>
-                  <Button variant="default" onClick={() => addToCart(deal)} className="mt-4">
+                  <Button
+                    variant="default"
+                    onClick={() => addToCart(deal)}
+                    className="mt-4"
+                  >
                     Add to Cart
                   </Button>
                 </CardContent>
