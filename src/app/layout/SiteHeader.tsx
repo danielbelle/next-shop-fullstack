@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/Button";
 import { ShoppingCartIcon, MenuIcon, XIcon } from "lucide-react";
 import Link from "next/link";
 import { useCart } from "@/context/CartContext";
+import { useRouter, usePathname } from "next/navigation";
 
 const SiteHeader: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -13,8 +14,22 @@ const SiteHeader: React.FC = () => {
     setIsCartOpen,
     // addToCart, removeFromCart, updateQuantity (se quiser usar no header)
   } = useCart();
+  const router = useRouter();
+  const pathname = usePathname();
 
   const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+
+  const goToSection = (sectionId: string) => {
+    if (pathname === "/") {
+      // Se já está na home, faz scroll normalmente
+      const el = document.getElementById(sectionId);
+      if (el) el.scrollIntoView({ behavior: "smooth" });
+    } else {
+      // Se está em outra página, redireciona para home com query
+      router.push(`/?section=${sectionId}`);
+    }
+    setIsMenuOpen(false);
+  };
 
   return (
     <div className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -31,18 +46,22 @@ const SiteHeader: React.FC = () => {
             >
               Products
             </Link>
-            <a
-              className="transition-colors hover:text-foreground/80 text-foreground/60"
-              href="/#categories-section"
+            <button
+              className="transition-colors hover:text-foreground/80 text-foreground/60 bg-transparent border-none p-0"
+              style={{ cursor: "pointer" }}
+              type="button"
+              onClick={() => goToSection("categories")}
             >
               Categories
-            </a>
-            <a
-              className="transition-colors hover:text-foreground/80 text-foreground/60"
-              href="/#deals"
+            </button>
+            <button
+              className="transition-colors hover:text-foreground/80 text-foreground/60 bg-transparent border-none p-0"
+              style={{ cursor: "pointer" }}
+              type="button"
+              onClick={() => goToSection("deals")}
             >
               Deals
-            </a>
+            </button>
             <Link
               className="transition-colors hover:text-foreground/80 text-foreground/60"
               href="/about"
@@ -62,8 +81,8 @@ const SiteHeader: React.FC = () => {
           <span className="sr-only">Toggle Menu</span>
         </button>
         {isMenuOpen && (
-          <div className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm md:hidden">
-            <div className="fixed left-0 top-0 bottom-0 w-full max-w-xs p-6 bg-background shadow-lg">
+          <div className="fixed inset-0 z-50 bg-white/50 md:hidden">
+            <div className="fixed left-0 top-0 w-full max-w-xs p-6 bg-white shadow-lg">
               <div className="flex flex-col space-y-4">
                 <Link
                   className="text-sm font-medium text-primary"
@@ -72,20 +91,24 @@ const SiteHeader: React.FC = () => {
                 >
                   Products
                 </Link>
-                <a
-                  className="text-sm font-medium text-primary"
-                  href="/#categories-section"
-                  onClick={() => setIsMenuOpen(false)}
+                <button
+                  className="text-sm font-medium text-primary text-left"
+                  onClick={() => {
+                    goToSection("categories");
+                    setIsMenuOpen(false);
+                  }}
                 >
                   Categories
-                </a>
-                <a
-                  className="text-sm font-medium text-primary"
-                  href="/#deals"
-                  onClick={() => setIsMenuOpen(false)}
+                </button>
+                <button
+                  className="text-sm font-medium text-primary text-left"
+                  onClick={() => {
+                    goToSection("deals");
+                    setIsMenuOpen(false);
+                  }}
                 >
                   Deals
-                </a>
+                </button>
                 <Link
                   className="text-sm font-medium text-primary"
                   href="/about"
@@ -95,7 +118,7 @@ const SiteHeader: React.FC = () => {
                 </Link>
               </div>
               <button
-                className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background cursor-pointer transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
                 onClick={() => setIsMenuOpen(false)}
               >
                 <XIcon className="h-4 w-4" />

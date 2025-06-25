@@ -12,7 +12,7 @@ interface CategorySectionProps {
 
 const CategorySection: React.FC<CategorySectionProps> = ({ categories }) => {
   return (
-    <section className="w-full py-20 bg-white" id="categories-section">
+    <section className="w-full py-20 bg-white" id="categories">
       <div className="max-w-screen-xl mx-auto px-8">
         <h2 className="text-2xl font-extrabold text-center text-gray-900 mb-16">
           Explore Categories

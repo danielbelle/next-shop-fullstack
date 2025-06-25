@@ -1,4 +1,6 @@
 "use client";
+import { useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 
 import LogoSection from "@/app/landing/LogoSection";
 import DealsSection from "@/app/landing/DealsSection";
@@ -12,6 +14,17 @@ import { useCart } from "@/context/CartContext";
 
 export default function HomePage() {
   const { addToCart } = useCart();
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const section = searchParams?.get("section");
+    if (section) {
+      const el = document.getElementById(section);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  }, [searchParams]);
 
   return (
     <main className="flex-1">

@@ -1,3 +1,4 @@
+"use client";
 import { Button } from "@/components/ui/Button";
 import { ArrowRight, ShoppingBag } from "lucide-react";
 import Link from "next/link";
