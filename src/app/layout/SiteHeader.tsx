@@ -81,8 +81,8 @@ const SiteHeader: React.FC = () => {
           <span className="sr-only">Toggle Menu</span>
         </button>
         {isMenuOpen && (
-          <div className="fixed inset-0 z-50 bg-white/50 md:hidden">
-            <div className="fixed left-0 top-0 w-full max-w-xs p-6 bg-white shadow-lg">
+          <div className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm md:hidden">
+            <div className="fixed left-0 top-0 w-full max-w-xs p-6 bg-background shadow-lg">
               <div className="flex flex-col space-y-4">
                 <Link
                   className="text-sm font-medium text-primary"
